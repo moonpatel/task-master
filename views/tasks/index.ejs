@@ -11,7 +11,7 @@
     <a href="tasks/new">Add a task</a>
     <ul>
         <% for(let aTask of tasks) {%>
-        <li><%= aTask.title %> - <%= aTask.description %></li>
+        <li><%= aTask.title %> - <%= aTask.description %> : <a href="/tasks/<%=aTask._id%>">Show</a></li>
         <%}%>
     </ul>
 </body>

@@ -46,12 +46,20 @@ app.post('/tasks', async (req, res) => {
     await task.save()
     res.redirect('/tasks')
 })
+// show individual task
+app.get('/tasks/:id', async (req,res) => {
+    const task = await Task.findById(req.params.id)
+    res.render('tasks/show', {task})
+})
 
 // page not found
 app.all('*', (req, res) => res.send('PAGE NOT FOUND'))
 
 // all in one error handler
-app.use((err, req, res, next) => res.send(err))
+app.use((err, req, res, next) => {
+    console.log(err)
+    res.send(err, err.stack)
+})
 
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))
