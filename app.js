@@ -6,7 +6,7 @@ const methodOverride = require('method-override')
 const path = require('path')
 // Models
 const Task = require('./models/task')
-const { findByIdAndUpdate } = require('./models/task')
+const { findByIdAndUpdate, findByIdAndDelete } = require('./models/task')
 
 const app = express()   // express app object
 const port = 4000       // port number
@@ -66,6 +66,11 @@ app.put('/tasks/:id', async (req, res) => {
     const { title, description } = req.body.task
     await Task.findByIdAndUpdate(req.params.id, { title: title, description: description })
     res.redirect(`/tasks/${req.params.id}`)
+})
+// delete task from database
+app.delete('/tasks/:id/delete', async (req,res) => {
+    await Task.findByIdAndDelete(req.params.id)
+    res.redirect('/tasks')
 })
 
 // page not found

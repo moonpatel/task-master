@@ -12,5 +12,8 @@
     <p><%=task.description%></p>
     <a href="/tasks/<%=task._id%>/edit">Edit</a>
     <a href="/tasks/">Back</a>
+    <form action="/tasks/<%=task._id%>/delete?_method=DELETE" method="post">
+        <button>Delete</button>
+    </form>
 </body>
 </html>
