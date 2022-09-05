@@ -1,10 +1,12 @@
 // dependencies
 const express = require('express')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 // node packages
 const path = require('path')
 // Models
 const Task = require('./models/task')
+const { findByIdAndUpdate } = require('./models/task')
 
 const app = express()   // express app object
 const port = 4000       // port number
@@ -18,9 +20,12 @@ mongoose.connect('mongodb://localhost:27017/todo')
 // parse the req body (req.body will be undefined if case this middleware is absent)
 // set extended to true to avoid deprecated error
 app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))      // allows to override post method into other methods (put, delete)
 // setting some parameters
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, '/views'))
+// input defines the name of parameter for the method to override with
+
 
 // ROUTES
 // home page
@@ -47,9 +52,20 @@ app.post('/tasks', async (req, res) => {
     res.redirect('/tasks')
 })
 // show individual task
-app.get('/tasks/:id', async (req,res) => {
+app.get('/tasks/:id', async (req, res) => {
     const task = await Task.findById(req.params.id)
-    res.render('tasks/show', {task})
+    res.render('tasks/show', { task })
+})
+// form to edit a task
+app.get('/tasks/:id/edit', async (req, res) => {
+    const task = await Task.findById(req.params.id)
+    res.render('tasks/edit', { task })
+})
+// update the task in the database
+app.put('/tasks/:id', async (req, res) => {
+    const { title, description } = req.body.task
+    await Task.findByIdAndUpdate(req.params.id, { title: title, description: description })
+    res.redirect(`/tasks/${req.params.id}`)
 })
 
 // page not found
@@ -60,6 +76,5 @@ app.use((err, req, res, next) => {
     console.log(err)
     res.send(err, err.stack)
 })
-
 
 app.listen(port, () => console.log(`Listening on port: ${port}`))

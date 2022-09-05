@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%=task.title%></title>
+</head>
+<body>
+    <h1>Edit <%=task.title%></h1>
+    <!-- _method=PUT specifies that post method is to be iverride with put method -->
+    <form action="/tasks/<%=task._id%>?_method=PUT" method="post" >
+        <input type="text" name="task[title]" value="<%=task.title%>" placeholder="task name">
+        <textarea type="text" name="task[description]" placeholder="description"><%=task.description%></textarea>
+        <button>Add</button>
+    </form>
+</body>
+</html>
